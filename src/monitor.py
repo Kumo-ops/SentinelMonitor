@@ -1,4 +1,6 @@
 #Anthony Rodriguez, Kumo-Ops 
+import time
+import json
 import psutil 
 import platform 
 import socket 
@@ -33,6 +35,40 @@ def get_system_metrics():
     }
     return metrics
 
+# Display the metrics in a readable format
+def display_metrics(metrics):
+    print(f"Hostname: {metrics['hostname']}")
+    print(f"Operating System: {metrics['os']}")
+    print(f"Current Time: {metrics['time']}")
+    print(f"CPU Usage: {metrics['cpu_usage']}%")
+    print(f"Memory Usage: {metrics['memory_usage']}%")
+    print(f"Disk Usage: {metrics['disk_usage']}%")
+    print(f"Process Count: {metrics['process_count']}")
+    print(f"Uptime: {metrics['up_time']}")
+    print(f"Local IP Address: {metrics['local_IP']}")
+    print(f"Bytes Sent: {metrics['bytes_sent']}")
+    print(f"Bytes Received: {metrics['bytes_recv']}")
+    print("-" * 40)
 
-result = get_system_metrics()
-print(result)
+#  Save metrics to a JSON log file 
+def save_metrics(metrics):
+    try:
+        with open("metrics.json", "r") as metrics_file:
+            data = json.load(metrics_file)
+    except FileNotFoundError:
+        data = []
+
+    data.append(metrics)
+    
+    with open("metrics.json", "w") as metrics_file:
+        json.dump(data, metrics_file)
+
+
+while True:
+    metrics = get_system_metrics()
+    display_metrics(metrics)
+    save_metrics(metrics)
+    time.sleep(4)
+
+
+
