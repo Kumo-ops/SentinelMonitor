@@ -53,15 +53,15 @@ def display_metrics(metrics):
 #  Save metrics to a JSON log file 
 def save_metrics(metrics):
     try:
-        with open("metrics.json", "r") as metrics_file:
+        with open("data/metrics.json", "r") as metrics_file:
             data = json.load(metrics_file)
     except FileNotFoundError:
         data = []
 
     data.append(metrics)
-    
-    with open("metrics.json", "w") as metrics_file:
-        json.dump(data, metrics_file)
+
+    with open("data/metrics.json", "w") as metrics_file:
+        json.dump(data, metrics_file, indent=4)
 
 
 while True:
