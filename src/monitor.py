@@ -5,6 +5,7 @@ import psutil
 import platform 
 import socket 
 from datetime import datetime
+from detection import detect_incidents
 
 #python dictonary to get computing system metrics 
 def get_system_metrics():
@@ -67,8 +68,20 @@ def save_metrics(metrics):
 while True:
     metrics = get_system_metrics()
     display_metrics(metrics)
+    print("Detecting incidents...")
+    incidents = detect_incidents(metrics)
+    print("Incidents detected:")
+    #For every category and status in the incidents dictionary,
+    #-print the category  and its status. 
+    for category, status in incidents.items():
+        if status != "NORMAL":
+            print(f"{category}: {status}")
+            
+    if all(status == "NORMAL" for status in incidents.values()):
+        print("Computer Systems: HEALTHY")
     save_metrics(metrics)
     time.sleep(4)
+    
 
 
 
